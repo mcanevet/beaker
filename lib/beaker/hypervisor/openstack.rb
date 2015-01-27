@@ -91,6 +91,15 @@ module Beaker
         if @options[:openstack_keyname]
           @logger.debug "Adding optional key_name #{@options[:openstack_keyname]} to #{host.name} (#{host[:vmhostname]})"
           options[:key_name] = @options[:openstack_keyname]
+        else
+          @logger.debug "Generate a new rsa key"
+          key = OpenSSL::PKey::RSA.new 2048
+          type = key.ssh_type
+          data = [ key.to_blob ].pack('m0')
+          @logger.debug "Creating Openstack keypair for public key '#{type} #{data}'"
+          @compute_client.create_key_pair host[:vmhostname], "#{type} #{data}"
+          options[:key_name] = host[:vmhostname]
+          host['ssh'][:key_data] = [ key.to_pem ]
         end
         vm = @compute_client.servers.create(options)
 
@@ -149,6 +158,10 @@ module Beaker
         end
         @logger.debug "Destroying OpenStack host #{vm.name}"
         vm.destroy
+        if @options[:openstack_keyname].nil?
+          @logger.debug "Deleting random keypair"
+          @compute_client.delete_key_pair vm.name
+        end
       end
     end
 
