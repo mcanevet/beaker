@@ -532,5 +532,18 @@ module Beaker
       end
 
     end
+
+    context 'mkdir_p' do
+      it 'runs directory creation command and runs it' do
+        @options = { :is_cygwin => true }
+        result = Beaker::Result.new(host, '')
+        result.exit_code = 0
+        expect( Beaker::Command ).to receive(:new).with("mkdir -p /Foo/")
+        expect( host ).to receive(:exec).once.and_return(result)
+
+        host.mkdir_p ('/Foo/')
+      end
+    end
+
   end
 end
