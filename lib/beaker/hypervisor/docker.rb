@@ -71,7 +71,7 @@ module Beaker
         })
 
         @logger.debug("Starting container #{container.id}")
-        container.start({"PublishAllPorts" => true, "Privileged" => true})
+        container.start({"PublishAllPorts" => true, "Privileged" => true, "CapAdd" => nil})
 
         # Find out where the ssh port is from the container
         # When running on swarm DOCKER_HOST points to the swarm manager so we have to get the
