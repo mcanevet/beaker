@@ -3,7 +3,7 @@ require 'timeout'
 require 'benchmark'
 require 'rsync'
 
-[ 'command', 'ssh_connection'].each do |lib|
+[ 'command', 'ssh_connection', 'docker_connection'].each do |lib|
   require "beaker/#{lib}"
 end
 
@@ -35,6 +35,9 @@ module Beaker
     end
 
     def self.create name, host_hash, options
+      if host_hash['hypervisor'] == 'docker'
+        return ::Docker::Host.new name, host_hash, options
+      end
       case host_hash['platform']
       when /windows/
         cygwin = host_hash['is_cygwin']
@@ -491,6 +494,7 @@ module Beaker
   end
 
   [
+    'docker',
     'unix',
     'aix',
     'mac',

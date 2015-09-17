@@ -129,6 +129,9 @@ module Beaker
 
             opts[:protocol] ||= 'scp'
             case opts[:protocol]
+            when 'docker'
+              logger.debug "Using docker exec to transfer #{source_path} to #{target_path}"
+              docker_cp_to host, source_path, target_module_dir, {:ignore => ignore_list}
             when 'scp'
               #move to the host
               logger.debug "Using scp to transfer #{source_path} to #{target_path}"

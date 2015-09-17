@@ -134,7 +134,7 @@ module Beaker
         def add_foss_defaults_on(hosts)
           block_on hosts do | host |
             case host.class.to_s.downcase
-            when /aix|unix/
+            when /aix|unix|docker/
               platform = 'unix'
             when /freebsd/
               platform = 'freebsd'
