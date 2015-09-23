@@ -78,6 +78,14 @@ module Beaker
         # IP of the swarm slave via the container data
         # When we are talking to a normal docker instance DOCKER_HOST can point to a remote docker instance.
 
+        @logger.debug("container = #{container}")
+        @logger.debug("container.json = #{container.json}")
+        @logger.debug("container.json['NetworkSettings'] = #{container.json['NetworkSettings']}")
+        @logger.debug("container.json['NetworkSettings']['Ports'] = #{container.json['NetworkSettings']['Ports']}")
+        @logger.debug("container.json['NetworkSettings']['Ports']['22/tcp'] = #{container.json['NetworkSettings']['Ports']['22/tcp']}")
+        @logger.debug("container.json['NetworkSettings']['Ports']['22/tcp'][0] = #{container.json['NetworkSettings']['Ports']['22/tcp'][0]}")
+        @logger.debug("container.json['NetworkSettings']['Ports']['22/tcp'][0]['HostIp'] = #{container.json['NetworkSettings']['Ports']['22/tcp'][0]['HostIp']}")
+
         # Talking against a remote docker host which is a normal docker host
         if @docker_type == 'docker' && ENV['DOCKER_HOST']
           ip = URI.parse(ENV['DOCKER_HOST']).host
